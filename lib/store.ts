@@ -244,3 +244,57 @@ export const useUIStore = create<UIState>((set) => ({
   openQuickView: (product) => set({ quickViewProduct: product }),
   closeQuickView: () => set({ quickViewProduct: null })
 }));
+
+// =====================================================
+// COMBINED STORE HOOK (Convenience)
+// =====================================================
+export function useStore() {
+  const cart = useCartStore();
+  const wishlist = useWishlistStore();
+  const recentlyViewed = useRecentlyViewedStore();
+  const search = useSearchStore();
+  const ui = useUIStore();
+
+  return {
+    // Cart
+    cart: cart.items,
+    isCartOpen: cart.isOpen,
+    addToCart: cart.addItem,
+    removeFromCart: cart.removeItem,
+    updateQuantity: cart.updateQuantity,
+    clearCart: cart.clearCart,
+    toggleCart: cart.toggleCart,
+    openCart: cart.openCart,
+    closeCart: cart.closeCart,
+    getCartTotal: cart.getTotalPrice,
+    getCartCount: cart.getTotalItems,
+
+    // Wishlist
+    wishlist: wishlist.items,
+    addToWishlist: wishlist.addItem,
+    removeFromWishlist: wishlist.removeItem,
+    toggleWishlist: wishlist.toggleItem,
+    isInWishlist: wishlist.isInWishlist,
+
+    // Recently Viewed
+    recentlyViewed: recentlyViewed.items,
+    addToRecentlyViewed: recentlyViewed.addItem,
+
+    // Search
+    isSearchOpen: search.isOpen,
+    searchQuery: search.query,
+    recentSearches: search.recentSearches,
+    openSearch: search.openSearch,
+    closeSearch: search.closeSearch,
+    setSearchQuery: search.setQuery,
+    addRecentSearch: search.addRecentSearch,
+
+    // UI
+    mobileMenuOpen: ui.mobileMenuOpen,
+    quickViewProduct: ui.quickViewProduct,
+    toggleMobileMenu: ui.toggleMobileMenu,
+    closeMobileMenu: ui.closeMobileMenu,
+    openQuickView: ui.openQuickView,
+    closeQuickView: ui.closeQuickView,
+  };
+}
